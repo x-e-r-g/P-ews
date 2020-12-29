@@ -1,2 +1,3 @@
-npm install expo-cli — global
+﻿npm install expo-cli — global
 expo init p-ews
+npm install react-native-chart-kit
