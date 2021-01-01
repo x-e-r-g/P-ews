@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from "react";
-import { SafeAreaView, StatusBar, StyleSheet} from "react-native";
+import { SafeAreaView, View, StatusBar, StyleSheet} from "react-native";
+import Icon from 'react-native-vector-icons/Feather';
+import DropDownPicker from 'react-native-dropdown-picker';
 import { Text, Header} from "react-native-elements";
 import { PieChart } from "react-native-chart-kit";
 
@@ -8,6 +10,7 @@ import {getWorldStats} from "./../requests/CovidStatsWorld"
 
 const CovidStatsScreen = (props) => {
     const [worldStats, setWorldStats] = useState({});
+    const [selectedCountry, setSelectedCountry] = useState("uk");
     const loadWorldStats = async()=>{
         const response = await getWorldStats();
         if(response.ok){
@@ -20,23 +23,26 @@ const CovidStatsScreen = (props) => {
 
     const worldData = [
         {
+            name: "New Recovered",
+            value: "New Recovered",
+            population: 20,//worldStats.NewRecovered,
+            color: "#7f7fff",
+            legendFontColor: "#FFFFFF",
+            legendFontSize: 12
+        },
+        {
             name: "New Confirmed",
-            population: worldStats.NewConfirmed,
+            value: "New Confirmed",
+            population: 30,// worldStats.NewConfirmed,
             color: "#4c4cff",
             legendFontColor: "#FFFFFF",
             legendFontSize: 12
         },
         {
             name: "New Deaths",
-            population: worldStats.NewDeaths,
+            value: "New Deaths",
+            population: 50,//worldStats.NewDeaths,
             color: "#1919ff",
-            legendFontColor: "#FFFFFF",
-            legendFontSize: 12
-        },
-        {
-            name: "New Recovered",
-            population: worldStats.NewRecovered,
-            color: "#7f7fff",
             legendFontColor: "#FFFFFF",
             legendFontSize: 12
         }
@@ -49,7 +55,7 @@ const CovidStatsScreen = (props) => {
     <SafeAreaView style={styles.SFViewStyle}>
             <Header
                 containerStyle={{
-                    backgroundColor: '#1c1c1c',
+                    backgroundColor: '#7f7fff',
                 }}
                 leftComponent={{
                     icon: "menu",
@@ -64,6 +70,22 @@ const CovidStatsScreen = (props) => {
             <Text style={styles.HeaderStyle}>Live World Stats</Text>
             <PieCard
                 data={worldData}
+            />
+            <DropDownPicker
+                items={[
+                    { label: 'USA', value: 'usa'},
+                    { label: 'UK', value: 'uk'},
+                    { label: 'France', value: 'france'},
+                ]}
+                defaultValue={selectedCountry}
+                multiple={false}
+                containerStyle={{ height: 40 }}
+                style={{ backgroundColor: '#fafafa' }}
+                itemStyle={{
+                    justifyContent: 'flex-start'
+                }}
+                dropDownStyle={{ backgroundColor: '#fafafa' }}
+                onChangeItem={item => setSelectedCountry(item.value)}
             />
     </SafeAreaView>);
 }

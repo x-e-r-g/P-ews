@@ -1,3 +1,5 @@
 ﻿npm install expo-cli — global
 expo init p-ews
 npm install react-native-chart-kit
+npm install react-native-dropdown-picker --save
+npm install --save react-native-vector-icons
