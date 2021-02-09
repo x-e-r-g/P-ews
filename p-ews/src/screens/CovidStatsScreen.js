@@ -11,7 +11,7 @@ import {getWorldStats} from "./../requests/CovidStatsWorld"
 const CovidStatsScreen = (props) => {
     var data = [];
     const [worldStats, setWorldStats] = useState({});
-    const [selectedCountry, setSelectedCountry] = useState("Bangladesh");
+    const [selectedCountry, setSelectedCountry] = useState("Select a Country");
     const [countryStats, setCountryStats] = useState([]);
     const [selectedCountryStats, setSelectedCountryStats] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -28,6 +28,11 @@ const CovidStatsScreen = (props) => {
     };
 
     const countryData = [];
+    let unselected = {
+        label: "Select a Country",
+        value: "Select a Country"
+    }
+    countryData.push(unselected);
     countryStats.forEach((country)=>{
         let data = {
             label: country.Country,
@@ -130,7 +135,10 @@ const CovidStatsScreen = (props) => {
                 <PieCard
                 data={worldData}
             />
-            <PieCard data={selectedCountryStats}/>
+                {selectedCountry !== "Select a Country" ? (<View>
+                    <Text style={styles.HeaderStyle}>{selectedCountry}</Text>
+                    <PieCard data={selectedCountryStats} />
+                    </View>):(<View></View>)}
             <DropDownPicker
                 items={countryData}
                 defaultValue={selectedCountry}
