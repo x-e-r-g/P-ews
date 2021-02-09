@@ -9,23 +9,63 @@ import PieCard from "./../Components/PieCard";
 import {getWorldStats} from "./../requests/CovidStatsWorld"
 
 const CovidStatsScreen = (props) => {
+    var data = [];
     const [worldStats, setWorldStats] = useState({});
-    const [selectedCountry, setSelectedCountry] = useState("uk");
+    const [selectedCountry, setSelectedCountry] = useState("Bangladesh");
+    const [countryStats, setCountryStats] = useState([]);
+    const [selectedCountryStats, setSelectedCountryStats] = useState([]);
+    const [loading, setLoading] = useState(true);
     const loadWorldStats = async()=>{
+        setLoading(true);
         const response = await getWorldStats();
         if(response.ok){
             setWorldStats(response.data.Global);
+            setCountryStats(response.data.Countries);
+            setLoading(false);
         }else{
             alert(response.problem);
         }
     };
 
-
+    const countryData = [];
+    countryStats.forEach((country)=>{
+        let data = {
+            label: country.Country,
+            value: country.Country,
+            stats: [
+                {
+                    name: "New Recovered",
+                    value: "New Recovered",
+                    population: country.NewRecovered,
+                    color: "#7f7fff",
+                    legendFontColor: "#FFFFFF",
+                    legendFontSize: 12
+                },
+                {
+                    name: "New Confirmed",
+                    value: "New Confirmed",
+                    population: country.NewConfirmed,
+                    color: "#4c4cff",
+                    legendFontColor: "#FFFFFF",
+                    legendFontSize: 12
+                },
+                {
+                    name: "New Deaths",
+                    value: "New Deaths",
+                    population: country.NewDeaths,
+                    color: "#1919ff",
+                    legendFontColor: "#FFFFFF",
+                    legendFontSize: 12
+                }
+            ]
+        }
+        countryData.push(data);
+    })
     const worldData = [
         {
             name: "New Recovered",
             value: "New Recovered",
-            population: 20,//worldStats.NewRecovered,
+            population: worldStats.NewRecovered,
             color: "#7f7fff",
             legendFontColor: "#FFFFFF",
             legendFontSize: 12
@@ -33,7 +73,7 @@ const CovidStatsScreen = (props) => {
         {
             name: "New Confirmed",
             value: "New Confirmed",
-            population: 30,// worldStats.NewConfirmed,
+            population: worldStats.NewConfirmed,
             color: "#4c4cff",
             legendFontColor: "#FFFFFF",
             legendFontSize: 12
@@ -41,7 +81,7 @@ const CovidStatsScreen = (props) => {
         {
             name: "New Deaths",
             value: "New Deaths",
-            population: 50,//worldStats.NewDeaths,
+            population: worldStats.NewDeaths,
             color: "#1919ff",
             legendFontColor: "#FFFFFF",
             legendFontSize: 12
@@ -51,8 +91,8 @@ const CovidStatsScreen = (props) => {
     useEffect(()=>{
         loadWorldStats();
     }, []);
-    return (
-    <SafeAreaView style={styles.SFViewStyle}>
+    if(loading){
+        return(
             <Header
                 containerStyle={{
                     backgroundColor: '#7f7fff',
@@ -67,27 +107,47 @@ const CovidStatsScreen = (props) => {
                     color: "#fff"
                 }}
             />
-            <Text style={styles.HeaderStyle}>Live World Stats</Text>
-            <PieCard
+        );
+    }else{
+        return (
+            <SafeAreaView style={styles.SFViewStyle}>
+                <Header
+                    containerStyle={{
+                        backgroundColor: '#7f7fff',
+                    }}
+                    leftComponent={{
+                        icon: "menu",
+                        color: "#fff",
+                    }}
+                    centerComponent={{ text: "P-ews", style: { color: "#fff", fontSize: 20 } }}
+                    rightComponent={{
+                        icon: "lock-outline",
+                        color: "#fff"
+                    }}
+                />
+                <Text style={styles.HeaderStyle}>Live World Stats</Text>
+
+                <PieCard
                 data={worldData}
             />
+            <PieCard data={selectedCountryStats}/>
             <DropDownPicker
-                items={[
-                    { label: 'USA', value: 'usa'},
-                    { label: 'UK', value: 'uk'},
-                    { label: 'France', value: 'france'},
-                ]}
+                items={countryData}
                 defaultValue={selectedCountry}
                 multiple={false}
-                containerStyle={{ height: 40 }}
+                containerStyle={{ height: 40}}
                 style={{ backgroundColor: '#fafafa' }}
                 itemStyle={{
                     justifyContent: 'flex-start'
                 }}
                 dropDownStyle={{ backgroundColor: '#fafafa' }}
-                onChangeItem={item => setSelectedCountry(item.value)}
+                onChangeItem={item => {
+                    setSelectedCountry(item.value);
+                    setSelectedCountryStats(item.stats);
+                }}
             />
-    </SafeAreaView>);
+            </SafeAreaView>);
+    }
 }
 
 const styles = StyleSheet.create({
