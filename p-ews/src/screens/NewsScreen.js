@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, StatusBar, SafeAreaView, View } from 'react-native';
 import { Header } from 'react-native-elements';
 import { getNews } from "./../api/News";
 import { FlatList } from 'react-native';
@@ -31,10 +31,10 @@ const NewsScreen = () => {
     }
     if (!loading) {
         return (
-            <View>
+            <SafeAreaView style={styles.SFViewStyle}>
                 <Header
                     containerStyle={{
-                        backgroundColor: '#1c1c1c',
+                        backgroundColor: '#7f7fff',
                     }}
                     leftComponent={{
                         icon: "menu",
@@ -46,7 +46,7 @@ const NewsScreen = () => {
                         color: "#fff"
                     }}
                 />
-                <FlatList
+                <FlatList style={{marginBottom: 25}}
                     data={articles}//
                     renderItem={({ item }) => {
                         console.log("item", item);
@@ -56,11 +56,11 @@ const NewsScreen = () => {
                     refreshing={refresh}
                     onRefresh={handleRefresh}
                 />
-            </View>
+            </SafeAreaView>
         );
     } else {
         return (
-            <View>
+            <SafeAreaView style={styles.SFViewStyle}>
                 <Header
                     containerStyle={{
                         backgroundColor: '#1c1c1c',
@@ -75,7 +75,7 @@ const NewsScreen = () => {
                         color: "#fff"
                     }}
                 />
-            </View>
+                </SafeAreaView>
         );
     }
 }
@@ -86,6 +86,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    SFViewStyle: {
+        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+        justifyContent: 'center'
     },
 });
 

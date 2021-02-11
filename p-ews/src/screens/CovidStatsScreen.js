@@ -98,20 +98,22 @@ const CovidStatsScreen = (props) => {
     }, []);
     if(loading){
         return(
-            <Header
-                containerStyle={{
-                    backgroundColor: '#7f7fff',
-                }}
-                leftComponent={{
-                    icon: "menu",
-                    color: "#fff",
-                }}
-                centerComponent={{ text: "P-ews", style: { color: "#fff", fontSize: 20 } }}
-                rightComponent={{
-                    icon: "lock-outline",
-                    color: "#fff"
-                }}
-            />
+            <SafeAreaView style={styles.SFViewStyle}>
+                <Header
+                    containerStyle={{
+                        backgroundColor: '#7f7fff',
+                    }}
+                    leftComponent={{
+                        icon: "menu",
+                        color: "#fff",
+                    }}
+                    centerComponent={{ text: "P-ews", style: { color: "#fff", fontSize: 20 } }}
+                    rightComponent={{
+                        icon: "lock-outline",
+                        color: "#fff"
+                    }}
+                />
+            </SafeAreaView>
         );
     }else{
         return (
@@ -131,29 +133,31 @@ const CovidStatsScreen = (props) => {
                     }}
                 />
                 <Text style={styles.HeaderStyle}>Live World Stats</Text>
-
                 <PieCard
-                data={worldData}
-            />
-                {selectedCountry !== "Select a Country" ? (<View>
+                    data={worldData}
+                />
+            <View>
+                    <DropDownPicker
+                        onOpen={() => { setSelectedCountry("Select a Country")}}
+                        items={countryData}
+                        defaultValue={selectedCountry}
+                        multiple={false}
+                        containerStyle={{ height: 40 }}
+                        style={{ backgroundColor: '#fafafa' }}
+                        itemStyle={{
+                            justifyContent: 'flex-start'
+                        }}
+                        dropDownStyle={{ backgroundColor: '#fafafa' }}
+                        onChangeItem={item => {
+                            setSelectedCountry(item.value);
+                            setSelectedCountryStats(item.stats);
+                        }}
+                    />
+            </View>
+                {selectedCountry !== "Select a Country" ? (<View style={{zIndex:-100000}}>
                     <Text style={styles.HeaderStyle}>{selectedCountry}</Text>
                     <PieCard data={selectedCountryStats} />
-                    </View>):(<View></View>)}
-            <DropDownPicker
-                items={countryData}
-                defaultValue={selectedCountry}
-                multiple={false}
-                containerStyle={{ height: 40}}
-                style={{ backgroundColor: '#fafafa' }}
-                itemStyle={{
-                    justifyContent: 'flex-start'
-                }}
-                dropDownStyle={{ backgroundColor: '#fafafa' }}
-                onChangeItem={item => {
-                    setSelectedCountry(item.value);
-                    setSelectedCountryStats(item.stats);
-                }}
-            />
+                </View>) : (<View></View>)}
             </SafeAreaView>);
     }
 }

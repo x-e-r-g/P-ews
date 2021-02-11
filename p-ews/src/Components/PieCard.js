@@ -18,7 +18,8 @@ const PieCard = (props) => {
                     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                     labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                     style: {
-                        borderRadius: 16
+                        borderRadius: 16,
+                        zIndex: -10
                     },
                     propsForDots: {
                         r: "6",

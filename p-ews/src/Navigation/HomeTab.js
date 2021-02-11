@@ -9,7 +9,7 @@ const HomeTab = createMaterialBottomTabNavigator();
 
 const HomeTabScreen = () => {
     return (
-        <HomeTab.Navigator initialRouteName="News" barStyle={{ backgroundColor: '#1C1C1C' }}>
+        <HomeTab.Navigator initialRouteName="News" barStyle={{ backgroundColor: '#7f7fff' }}>
             <HomeTab.Screen
                 name="News"
                 component={NewsScreen}
@@ -17,9 +17,9 @@ const HomeTabScreen = () => {
                     tabBarLabel: "News",
                     tabBarIcon: ({ focused }) =>
                         focused ? (
-                            <Entypo name="News" color="white" size={26} />
+                            <Ionicons name="ios-newspaper" color="white" size={26} />
                         ) : (
-                                <AntDesign name="News" color="white" size={22} />
+                                <Ionicons name="ios-newspaper-outline" color="white" size={22} />
                             ),
                 }}
             />
@@ -31,13 +31,9 @@ const HomeTabScreen = () => {
                         tabBarLabel: "Covid Stats",
                         tabBarIcon: ({ focused }) =>
                             focused ? (
-                                <Ionicons name="ios-notifications" size={26} color="white" />
+                                <Ionicons name="stats-chart" color="white" size={26} />
                             ) : (
-                                    <Ionicons
-                                        name="ios-notifications-outline"
-                                        size={22}
-                                        color="white"
-                                    />
+                                    <Ionicons name="stats-chart-outline" color="white" size={22} />
                                 ),
                     }
                 }
