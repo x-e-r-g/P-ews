@@ -5,15 +5,35 @@ import React from 'react';
 // import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import HomeTab from "./src/Navigation/HomeTab";
+import AuthStackScreen from "./src/Navigation/AuthStack";
+import { AuthContext, AuthProvider } from "./src/Provider/AuthProvider";
 
-import CovidStatsScreen from "./src/screens/CovidStatsScreen";
-import NewsScreen from "./src/screens/NewsScreen";
+import * as firebase from 'firebase';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBZ0U4i8gwkeSN_Ia184ROzcifpfiwGrPg",
+  authDomain: "projectauth-68a00.firebaseapp.com",
+  projectId: "projectauth-68a00",
+  storageBucket: "projectauth-68a00.appspot.com",
+  messagingSenderId: "551639822400",
+  appId: "1:551639822400:web:6b3419c1eb03213798afa5"
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 const App = ()=>{
   return (
-    <NavigationContainer>
-      <HomeTab/>
-    </NavigationContainer>
+    <AuthProvider>
+      <AuthContext.Consumer>
+        {(auth) => (
+          <NavigationContainer>
+            {auth.IsLoggedIn ? < HomeTab /> : <AuthStackScreen />}
+          </NavigationContainer>
+        )}
+      </AuthContext.Consumer>
+    </AuthProvider>
   );
 }
 

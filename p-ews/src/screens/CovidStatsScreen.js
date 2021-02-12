@@ -4,9 +4,10 @@ import Icon from 'react-native-vector-icons/Feather';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Text, Header} from "react-native-elements";
 import { PieChart } from "react-native-chart-kit";
-
+import { AuthContext } from "./../Provider/AuthProvider";
 import PieCard from "./../Components/PieCard";
-import {getWorldStats} from "./../requests/CovidStatsWorld"
+import {getWorldStats} from "./../requests/CovidStatsWorld";
+import * as firebase from 'firebase';
 
 const CovidStatsScreen = (props) => {
     var data = [];
@@ -98,67 +99,70 @@ const CovidStatsScreen = (props) => {
     }, []);
     if(loading){
         return(
-            <SafeAreaView style={styles.SFViewStyle}>
-                <Header
-                    containerStyle={{
-                        backgroundColor: '#7f7fff',
-                    }}
-                    leftComponent={{
-                        icon: "menu",
-                        color: "#fff",
-                    }}
-                    centerComponent={{ text: "P-ews", style: { color: "#fff", fontSize: 20 } }}
-                    rightComponent={{
-                        icon: "lock-outline",
-                        color: "#fff"
-                    }}
-                />
-            </SafeAreaView>
+            
+                    <SafeAreaView style={styles.SFViewStyle}>
+                        <Header
+                            containerStyle={{
+                                backgroundColor: '#7f7fff',
+                            }}
+                            leftComponent={{
+                                icon: "menu",
+                                color: "#fff",
+                            }}
+                            centerComponent={{ text: "P-ews", style: { color: "#fff", fontSize: 20 } }}
+                            rightComponent={{
+                                icon: "lock-outline",
+                                color: "#fff",
+                                onPress: function () {
+                                }
+                            }}
+                        />
+                    </SafeAreaView>
         );
     }else{
         return (
-            <SafeAreaView style={styles.SFViewStyle}>
-                <Header
-                    containerStyle={{
-                        backgroundColor: '#7f7fff',
-                    }}
-                    leftComponent={{
-                        icon: "menu",
-                        color: "#fff",
-                    }}
-                    centerComponent={{ text: "P-ews", style: { color: "#fff", fontSize: 20 } }}
-                    rightComponent={{
-                        icon: "lock-outline",
-                        color: "#fff"
-                    }}
-                />
-                <Text style={styles.HeaderStyle}>Live World Stats</Text>
-                <PieCard
-                    data={worldData}
-                />
-            <View>
-                    <DropDownPicker
-                        onOpen={() => { setSelectedCountry("Select a Country")}}
-                        items={countryData}
-                        defaultValue={selectedCountry}
-                        multiple={false}
-                        containerStyle={{ height: 40 }}
-                        style={{ backgroundColor: '#fafafa' }}
-                        itemStyle={{
-                            justifyContent: 'flex-start'
-                        }}
-                        dropDownStyle={{ backgroundColor: '#fafafa' }}
-                        onChangeItem={item => {
-                            setSelectedCountry(item.value);
-                            setSelectedCountryStats(item.stats);
-                        }}
-                    />
-            </View>
-                {selectedCountry !== "Select a Country" ? (<View style={{zIndex:-100000}}>
-                    <Text style={styles.HeaderStyle}>{selectedCountry}</Text>
-                    <PieCard data={selectedCountryStats} />
-                </View>) : (<View></View>)}
-            </SafeAreaView>);
+                    <SafeAreaView style={styles.SFViewStyle}>
+                        <Header
+                            containerStyle={{
+                                backgroundColor: '#7f7fff',
+                            }}
+                            leftComponent={{
+                                icon: "menu",
+                                color: "#fff",
+                            }}
+                            centerComponent={{ text: "P-ews", style: { color: "#fff", fontSize: 20 } }}
+                            rightComponent={{
+                                icon: "lock-outline",
+                                color: "#fff"
+                            }}
+                        />
+                        <Text style={styles.HeaderStyle}>Live World Stats</Text>
+                        <PieCard
+                            data={worldData}
+                        />
+                        <View>
+                            <DropDownPicker
+                                onOpen={() => { setSelectedCountry("Select a Country") }}
+                                items={countryData}
+                                defaultValue={selectedCountry}
+                                multiple={false}
+                                containerStyle={{ height: 40 }}
+                                style={{ backgroundColor: '#fafafa' }}
+                                itemStyle={{
+                                    justifyContent: 'flex-start'
+                                }}
+                                dropDownStyle={{ backgroundColor: '#fafafa' }}
+                                onChangeItem={item => {
+                                    setSelectedCountry(item.value);
+                                    setSelectedCountryStats(item.stats);
+                                }}
+                            />
+                        </View>
+                        {selectedCountry !== "Select a Country" ? (<View style={{ zIndex: -100000 }}>
+                            <Text style={styles.HeaderStyle}>{selectedCountry}</Text>
+                            <PieCard data={selectedCountryStats} />
+                        </View>) : (<View></View>)}
+                    </SafeAreaView>);
     }
 }
 

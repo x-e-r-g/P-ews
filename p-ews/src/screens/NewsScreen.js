@@ -4,7 +4,8 @@ import { Header } from 'react-native-elements';
 import { getNews } from "./../api/News";
 import { FlatList } from 'react-native';
 import Article from "./../Components/Article";
-
+import { AuthContext } from "./../Provider/AuthProvider";
+import * as firebase from 'firebase';
 const NewsScreen = () => {
     //let news = getNews();
     const [articles, setArticles] = useState([]);
@@ -31,51 +32,53 @@ const NewsScreen = () => {
     }
     if (!loading) {
         return (
-            <SafeAreaView style={styles.SFViewStyle}>
-                <Header
-                    containerStyle={{
-                        backgroundColor: '#7f7fff',
-                    }}
-                    leftComponent={{
-                        icon: "menu",
-                        color: "#fff",
-                    }}
-                    centerComponent={{ text: "P-ews", style: { color: "#fff", fontSize: 20 } }}
-                    rightComponent={{
-                        icon: "lock-outline",
-                        color: "#fff"
-                    }}
-                />
-                <FlatList style={{marginBottom: 25}}
-                    data={articles}//
-                    renderItem={({ item }) => {
-                        console.log("item", item);
-                        return (<Article article={item} />);
-                    }}
-                    keyExtractor={item => item.url}
-                    refreshing={refresh}
-                    onRefresh={handleRefresh}
-                />
-            </SafeAreaView>
+                    <SafeAreaView style={styles.SFViewStyle}>
+                        <Header
+                            containerStyle={{
+                                backgroundColor: '#7f7fff',
+                            }}
+                            leftComponent={{
+                                icon: "menu",
+                                color: "#fff",
+                            }}
+                            centerComponent={{ text: "P-ews", style: { color: "#fff", fontSize: 20 } }}
+                            rightComponent={{
+                                icon: "lock-outline",
+                                color: "#fff",
+                                onPress: function () {
+                                }
+                            }}
+                        />
+                        <FlatList style={{ marginBottom: 25 }}
+                            data={articles}//
+                            renderItem={({ item }) => {
+                                console.log("item", item);
+                                return (<Article article={item} />);
+                            }}
+                            keyExtractor={item => item.url}
+                            refreshing={refresh}
+                            onRefresh={handleRefresh}
+                        />
+                    </SafeAreaView>
         );
     } else {
         return (
-            <SafeAreaView style={styles.SFViewStyle}>
-                <Header
-                    containerStyle={{
-                        backgroundColor: '#1c1c1c',
-                    }}
-                    leftComponent={{
-                        icon: "menu",
-                        color: "#fff",
-                    }}
-                    centerComponent={{ text: "P-ews", style: { color: "#fff", fontSize: 20 } }}
-                    rightComponent={{
-                        icon: "lock-outline",
-                        color: "#fff"
-                    }}
-                />
-                </SafeAreaView>
+                    <SafeAreaView style={styles.SFViewStyle}>
+                        <Header
+                            containerStyle={{
+                                backgroundColor: '#1c1c1c',
+                            }}
+                            leftComponent={{
+                                icon: "menu",
+                                color: "#fff",
+                            }}
+                            centerComponent={{ text: "P-ews", style: { color: "#fff", fontSize: 20 } }}
+                            rightComponent={{
+                                icon: "lock-outline",
+                                color: "#fff"
+                            }}
+                        />
+                    </SafeAreaView>
         );
     }
 }
